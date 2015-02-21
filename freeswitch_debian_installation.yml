@@ -1,0 +1,44 @@
+---
+- hosts: 192.168.122.1
+
+  sudo: yes
+  remote_user: hellodk
+  tasks:
+    #- name: Updates apt cache
+     # action: apt update_cache=true
+    #- apt_key: url="https://jenkins-ci.org/debian/jenkins-ci.org.key" state="present"
+    #- apt: deb=/tmp/mypackage.deb
+    - name: install libtool
+      apt: name=libtool state=present
+    - name: install autoconf
+      apt: name=autoconf state=present
+    - name: install autoconf
+      apt: name=autoconf state=present
+    - name: install zlib1g
+      apt: name=zlib1g state=present  
+    - name: install zlib1g-dev
+      apt: name=zlib1g-dev state=present
+    - name: install libjpeg8-dev
+      apt: name=libjpeg8-dev state=present
+    - name: install checkinstall
+      apt: name=checkinstall state=present
+    - name: install sqlite3
+      apt: name=sqlite3 state=present  
+    - name: install libsqlite3-dev
+      apt: name=libsqlite3-dev state=present
+    - name: install libcurl3
+      apt: name=libcurl3 state=present
+    - name: install libcurl4-gnutls-dev
+      apt: name=libcurl4-gnutls-dev state=present
+    - name: install libpcre3-dev
+      apt: name=libpcre3-dev state=present
+    - name: install speex
+      apt: name=speex state=present
+    - name: install libspeex-dev
+      apt: name=libspeex-dev state=present
+    #- name: install  libspeexdsp-dev
+     # apt: name= libspeexdsp-dev state=present
+    - name: install libldns-dev
+      apt: name=libldns-dev state=present
+    - name: install libedit-dev
+      apt: name=libedit-dev state=present
