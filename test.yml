@@ -1,0 +1,21 @@
+---
+- hosts: 52.36.146.215
+  sudo: yes
+  remote_user: runuser
+  tasks:
+
+    - name: Install apt-package dependencies
+      apt:>
+        name="{{ item }}"
+        state="present"
+        force=yes
+      with_items:
+        - python-pip
+        - python-pycurl
+        - python-dev 
+        - git
+        - python-setuptools
+        - supervisor
+        - unzip
+        - gunicorn
+        - nginx 

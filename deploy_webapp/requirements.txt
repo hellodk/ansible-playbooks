@@ -1,0 +1,7 @@
+Django==1.9
+Jinja2==2.7.2
+gunicorn==17.5
+requests==2.2.1
+six==1.5.2
+ssh-import-id==3.21
+urllib3==1.7.1
