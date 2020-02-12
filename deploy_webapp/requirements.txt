@@ -1,4 +1,4 @@
-Django==1.9
+Django==1.11.28
 Jinja2==2.7.2
 gunicorn==17.5
 requests==2.2.1
