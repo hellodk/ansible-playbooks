@@ -1,0 +1,9 @@
+---
+
+- hosts: slaves # this is the remote system ip, need to be replaced
+  become: yes
+  remote_user: "vagrant"
+  roles:
+    - demo_role
+    - create_group
+    - myrole

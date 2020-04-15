@@ -1,5 +1,5 @@
 ---
-- hosts: 192.168.10.30
+- hosts: all
   become: "yes"
 
   tasks:
@@ -11,3 +11,7 @@
     
     - name: re-read facts after adding custom fact
       setup: filter=ansible_local
+      register: data
+
+    - name: Print the variables
+      debug: msg={{ data }}

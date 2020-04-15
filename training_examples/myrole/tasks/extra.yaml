@@ -1,0 +1,5 @@
+---
+
+- name: "Print OS"
+  command: "cat /etc/os-release"
+  when: ansible_facts['os_family'] == "Debian"

@@ -1,0 +1,157 @@
+192.168.10.30 | SUCCESS => {
+    "ansible_facts": {
+        "ansible_apparmor": {
+            "status": "enabled"
+        }, 
+        "ansible_architecture": "x86_64", 
+        "ansible_cmdline": {
+            "BOOT_IMAGE": "/boot/vmlinuz-4.15.0-96-generic", 
+            "console": "ttyS0", 
+            "ro": true, 
+            "root": "UUID=0679f1c9-b481-498c-ad60-511bcc87703f"
+        }, 
+        "ansible_date_time": {
+            "date": "2020-04-15", 
+            "day": "15", 
+            "epoch": "1586924486", 
+            "hour": "04", 
+            "iso8601": "2020-04-15T04:21:26Z", 
+            "iso8601_basic": "20200415T042126711167", 
+            "iso8601_basic_short": "20200415T042126", 
+            "iso8601_micro": "2020-04-15T04:21:26.711295Z", 
+            "minute": "21", 
+            "month": "04", 
+            "second": "26", 
+            "time": "04:21:26", 
+            "tz": "UTC", 
+            "tz_offset": "+0000", 
+            "weekday": "Wednesday", 
+            "weekday_number": "3", 
+            "weeknumber": "15", 
+            "year": "2020"
+        }, 
+        "ansible_distribution": "Ubuntu", 
+        "ansible_distribution_file_parsed": true, 
+        "ansible_distribution_file_path": "/etc/os-release", 
+        "ansible_distribution_file_variety": "Debian", 
+        "ansible_distribution_major_version": "18", 
+        "ansible_distribution_release": "bionic", 
+        "ansible_distribution_version": "18.04", 
+        "ansible_dns": {
+            "nameservers": [
+                "127.0.0.53"
+            ], 
+            "options": {
+                "edns0": true
+            }
+        }, 
+        "ansible_domain": "", 
+        "ansible_effective_group_id": 1000, 
+        "ansible_effective_user_id": 1000, 
+        "ansible_env": {
+            "HOME": "/home/vagrant", 
+            "LANG": "C.UTF-8", 
+            "LOGNAME": "vagrant", 
+            "MAIL": "/var/mail/vagrant", 
+            "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games", 
+            "PWD": "/home/vagrant", 
+            "SHELL": "/bin/bash", 
+            "SHLVL": "1", 
+            "SSH_CLIENT": "192.168.10.30 46090 22", 
+            "SSH_CONNECTION": "192.168.10.30 46090 192.168.10.30 22", 
+            "SSH_TTY": "/dev/pts/2", 
+            "TERM": "xterm-256color", 
+            "USER": "vagrant", 
+            "XDG_RUNTIME_DIR": "/run/user/1000", 
+            "XDG_SESSION_ID": "92", 
+            "_": "/bin/sh"
+        }, 
+        "ansible_fips": false, 
+        "ansible_fqdn": "ansiblem", 
+        "ansible_hostname": "ansiblem", 
+        "ansible_kernel": "4.15.0-96-generic", 
+        "ansible_kernel_version": "#97-Ubuntu SMP Wed Apr 1 03:25:46 UTC 2020", 
+        "ansible_local": {
+            "cluster": {
+                "backup": "complete", 
+                "state": "green"
+            }, 
+            "ipmi": {
+                "backup": "complete", 
+                "data": "Hello from {{ inventory_hostname}} ", 
+                "state": "green"
+            }
+        }, 
+        "ansible_lsb": {
+            "codename": "bionic", 
+            "description": "Ubuntu 18.04.4 LTS", 
+            "id": "Ubuntu", 
+            "major_release": "18", 
+            "release": "18.04"
+        }, 
+        "ansible_machine": "x86_64", 
+        "ansible_machine_id": "b81c5a4624884269b3207330f7a19242", 
+        "ansible_nodename": "ansiblem", 
+        "ansible_os_family": "Debian", 
+        "ansible_pkg_mgr": "apt", 
+        "ansible_proc_cmdline": {
+            "BOOT_IMAGE": "/boot/vmlinuz-4.15.0-96-generic", 
+            "console": [
+                "tty1", 
+                "ttyS0"
+            ], 
+            "ro": true, 
+            "root": "UUID=0679f1c9-b481-498c-ad60-511bcc87703f"
+        }, 
+        "ansible_python": {
+            "executable": "/usr/bin/python", 
+            "has_sslcontext": true, 
+            "type": "CPython", 
+            "version": {
+                "major": 2, 
+                "micro": 17, 
+                "minor": 7, 
+                "releaselevel": "final", 
+                "serial": 0
+            }, 
+            "version_info": [
+                2, 
+                7, 
+                17, 
+                "final", 
+                0
+            ]
+        }, 
+        "ansible_python_version": "2.7.17", 
+        "ansible_real_group_id": 1000, 
+        "ansible_real_user_id": 1000, 
+        "ansible_selinux": {
+            "status": "disabled"
+        }, 
+        "ansible_selinux_python_present": true, 
+        "ansible_service_mgr": "systemd", 
+        "ansible_ssh_host_key_dsa_public": "AAAAB3NzaC1kc3MAAACBAP6FM44VQcsUMfV9zbdfIaJEfTWCeTh/F4Z37oM3YwPklvbItKKd2wMyvh+jfhwO7eRaIDkr/3ksavh8AcUH/WxKYPACLRp22EprH4hCK/csmIicrWbM9x5pNR9jYKSwXtRevW8QrK+sQKANY+QKES8+5SUeybmt1UZqLFyAC2MfAAAAFQCH7ORHdXs2pH4wC47Idjp5WenOUQAAAIBbNHwhIzAgIzti2RE66Z4wkSN72dWFGxtpRp/i0QU9we0Av4S+/rTdM2YH5EiBHXIK+8+bxiPFS/LimeveSrGK3woBoOyh6m77ICLmmOud66bySNCKrdxxfgvvZuu5rl4oYjywM4k6OzngGLXG1TG/ME5XFy0DE6/ZRuirloGhagAAAIEA7YxPCrthXqEncc5p6CJBtBgxz7n7ACTmZWrtocrpKn+62an3R1x5ttdA5WEewU+v8LCbr4TbUJqGqx2dEa8m5C+CALU2omEksN0e73g/FIeqxrTkIEgyE0x2bNm7lcCtr9onFqJ1p3qjkXWSPt4md2AGtu2C59yifToZHVNuprA=", 
+        "ansible_ssh_host_key_ecdsa_public": "AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBAVQJUL0YCtL33UPH2aKR88b6t0NkWdSePsm7wxG2XPFKk4Pi93JJhsIqBpJOFIe5uU+pRnVVAUaLVt+bnyfp0Y=", 
+        "ansible_ssh_host_key_ed25519_public": "AAAAC3NzaC1lZDI1NTE5AAAAICJVW+S4e/6BZ0O+RT9dxzbt+LOPYp/GNTVYN+ovx9n/", 
+        "ansible_ssh_host_key_rsa_public": "AAAAB3NzaC1yc2EAAAADAQABAAABAQDK/S7JSbO7VZAr3No1g9ALE3L8StxhohV1ali90IEFsMNYc1tHyXd8TkYxiY/hhMuNFZHyC/EcgmpBIDewnN+k6LclO3U3lsQSNga22a8rTAVsZyoBU9ZBR9zzP3VL0eC7MQbKDcUnr7u3DpqixBczclmUoOQuSAVJ4+6TnMsPirAtm29l7XP80A10HxtebgR2hd4qRDi2c16aL+itQKJIBWOovXdCUbPSJUHU2OhZnN8C1NKDXfVurJ5/NfVx7sG/JkjpJD9ItN8vlB0cO2htHDLpjELVrT7FtPkm6fiPQcXzpqlD5baey/HrpMMEiDI5Sg46hqeWeGJCfWD925SR", 
+        "ansible_system": "Linux", 
+        "ansible_system_capabilities": [
+            ""
+        ], 
+        "ansible_system_capabilities_enforced": "True", 
+        "ansible_user_dir": "/home/vagrant", 
+        "ansible_user_gecos": ",,,", 
+        "ansible_user_gid": 1000, 
+        "ansible_user_id": "vagrant", 
+        "ansible_user_shell": "/bin/bash", 
+        "ansible_user_uid": 1000, 
+        "ansible_userspace_architecture": "x86_64", 
+        "ansible_userspace_bits": "64", 
+        "gather_subset": [
+            "!all", 
+            "facter"
+        ], 
+        "module_setup": true
+    }, 
+    "changed": false
+}

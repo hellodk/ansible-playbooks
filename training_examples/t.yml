@@ -9,6 +9,12 @@
         name: whois
         state: present
 
+    - name: Create password
+      command: 
+        name: whois
+        state: present
+
+
     - name: Create user with locked password
       user:
         name: tuvok
