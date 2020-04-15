@@ -1,0 +1,53 @@
+---
+- hosts: all
+  become: yes
+  remote_user: centos
+  tasks:
+
+
+    - name: "Create hellodk group"
+      group: >
+        name="hellodk"
+        state="present"
+
+    - name: "Create hellodk user - 'hellodk_user'"
+      user:
+        name: "hellodk"
+        group: "hellodk"
+        home: "/home/hellodk"
+        createhome: yes
+        comment: "hellodk user"
+        shell: "/bin/bash"
+        state: "present"  
+
+    - name: Copy the public keys to all machines
+      copy:
+        src: ~/.ssh/id_rsa.pub
+        dest: ~/.ssh/authorized_keys33
+        owner: centos
+        group: centos
+        mode: 600
+
+
+    - name: Create a folder mydir
+      file:
+        src: mydir
+        state: directory
+        path: /hom/centos
+        owner: centos
+        group: centos
+
+
+    - name: Add a line to a file if the file does not exist, without passing regexp
+      lineinfile:
+        path: /home/centos/mkdir/testfile
+        line: Deepak
+        create: yes
+
+    - name: Create softlink for sites-enabled
+      file:
+        src: /home/centos/mkdir/testfile
+        dest: /home/centos/mkdir/testlink
+        state: link
+        owner: centos
+        group: centos

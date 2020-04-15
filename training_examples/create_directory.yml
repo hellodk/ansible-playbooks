@@ -1,0 +1,14 @@
+---
+- hosts: 127.0.0.1
+  become: yes
+  remote_user: vagrant
+  # gather_facts: no
+  tasks:
+
+    - name: Create demo log directory
+      file:
+        path: "/var/log/demo/"
+        state: "directory"
+        owner: "admin"
+        group: "admin"
+        mode: 0755

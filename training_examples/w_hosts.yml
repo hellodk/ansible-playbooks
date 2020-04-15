@@ -1,0 +1,11 @@
+windows:
+  hosts:
+    vagrant-windows2012R2:
+      ansible_host: 192.168.10.35
+  vars:
+    ansible_user: vagrant
+    ansible_password: vagrant
+    ansible_connection: winrm
+    ansible_port: 5986
+    ansible_winrm_transport: ntlm
+    ansible_winrm_server_cert_validation: ignore

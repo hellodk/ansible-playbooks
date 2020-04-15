@@ -1,0 +1,22 @@
+---
+- hosts: all
+  become: no
+  remote_user: vagrant
+  tasks:
+
+    - name: "Create key pair"
+      openssh_keypair:
+        path: /home/vagrant/.ssh/id_rsa
+      delegate_to: localhost
+
+    - debug: msg="the value of foo.txt is {{lookup('file', '/home/vagrant/.ssh/id_rsa.pub') }}"
+   
+    - debug: msg='{{ ansible_user_dir }}'
+
+    - name: Copying the public keys
+      lineinfile:
+        path: "{{ ansible_user_dir }}/.ssh/authorized_keys"
+        line: "{{lookup('file', '/home/vagrant/.ssh/id_rsa.pub') }}"
+        state: present
+        backup: yes
+      register: example2out

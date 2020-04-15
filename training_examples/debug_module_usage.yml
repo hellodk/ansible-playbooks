@@ -1,0 +1,56 @@
+---
+- hosts: 192.168.10.30
+# - hosts: all
+# - hosts: slaves
+#- hosts: "{{ hosts }}"
+  become: "yes"
+  remote_user: vagrant
+  #remote_user: "{{ remote_user}}"
+
+  vars:
+    ntp_server: "ABC"
+
+  tasks:
+
+    # Example that prints the loopback address and gateway for each host
+    - name: Print System as it is
+      debug: msg="System"
+
+    - name: Collect only facts returned by facter
+      setup:
+        gather_subset:
+          - '!all'
+          - '!any'
+          - facter
+
+    - name: Printing hostname and default gateway
+      debug: msg="System {{ inventory_hostname }} has gateway {{ ansible_default_ipv4.gateway }}"
+      when: "ansible_default_ipv4.gateway is defined"
+    
+    - name: Storing result of a shell command
+      shell: /usr/bin/uptime
+      register: result
+    
+    - name: Printing variable only when the verbosity level is above 2
+      debug: var=result verbosity=2
+    
+    - name: Display all variables/facts known for a host
+      debug: var=hostvars[inventory_hostname] verbosity=4
+
+    - name: Printing the value for "{{ ntp_server }}"
+      debug: msg="{{ ntp_server }}"
+
+    # - name: Template testing
+    #   template:
+    #     src="issue.j2"
+    #     dest="/tmp/issue"
+    #     owner="root"
+    #     group="root"
+    #     mode="0400"
+
+    - name: Getting hostvars
+      debug: msg="System {{ hostvars }}"
+      register: my_result
+
+    - name: Printing the value
+      debug: msg="{{ result.stdout }}"

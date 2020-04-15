@@ -1,0 +1,36 @@
+---
+- hosts: all
+  remote_user: vagrant
+  become: yes
+
+  # vars:
+  #   from: "camelot"
+
+  vars_prompt:
+    - name: "name"
+      prompt: "what is your name?"
+      private: no
+
+    - name: "quest"
+      prompt: "what is your quest?"
+      private: no
+
+    - name: "favcolor"
+      prompt: "what is your favorite color?"
+      private: no
+
+    - name: "Password"
+      prompt: "what is your password?"
+
+    - name: "release_version"
+      prompt: "Product release version"
+      default: "1.0"
+
+  tasks:
+    - name: Printing the name
+      debug: msg="{{ name }}"
+
+    - name: Printing the password
+      debug: msg="{{ Password }}"
+
+# Now print the quest, favcolor, password

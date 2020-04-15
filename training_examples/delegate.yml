@@ -1,0 +1,25 @@
+---
+- hosts: all
+  become: yes
+  remote_user: vagrant
+  tasks:
+
+    - name: "Get the hostname"
+      shell:
+        cmd: "hostname"
+      register: non_delegated_hostnames
+
+    - name: Non-delegated hostnames
+      debug: var=non_delegated_hostnames
+
+    - name: Non-delegated hostnames
+      debug: var=non_delegated_hostnames.stdout
+
+    - name: "Get the hostname"
+      shell:
+        cmd: "hostname"
+      delegate_to: localhost
+      register: delegated_hostnames
+
+    - name: Non-delegated hostnames
+      debug: var=delegated_hostnames.stdout

@@ -1,0 +1,1 @@
+{"ansible_facts": {"discovered_interpreter_python": "/usr/bin/python3", "gather_subset": ["!all", "!min"], "module_setup": true}, "changed": false}

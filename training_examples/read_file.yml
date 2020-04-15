@@ -1,0 +1,7 @@
+---
+- hosts: 127.0.0.1
+  become: yes
+  remote_user: vagrant
+  tasks:
+
+    - debug: msg="{{lookup('file', '/home/vagrant/.ssh/id_rsa.pub') }}"

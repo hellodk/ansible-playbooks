@@ -1,0 +1,28 @@
+---
+# A list of tasty fruits
+- Apple
+- Orange
+- Strawberry
+- Mango
+#---------------------------------------------------------------
+
+---
+# An employee record...depicting a dictionary
+name: Example Developer
+job: Developer
+skill: Elite
+
+#or also in abbreviated format as below
+---
+# An employee record
+{name: Example Developer, job: Developer, skill: Elite}
+#---------------------------------------------------------------
+
+#for boolean expressions
+---
+create_key: yes
+needs_agent: no
+knows_oop: True
+likes_emacs: TRUE
+uses_cvs: false
+#----------------------------------------------------------------

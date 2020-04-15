@@ -1,0 +1,16 @@
+---
+- hosts: 127.0.0.1
+  become: yes
+  remote_user: vagrant
+  # gather_facts: yes
+  tasks:
+
+    - name: "Create '{{ user }}' user"
+      user: 
+        name: '{{ user }}'
+        state: "present"
+
+    - name: "Create '{{ group_name }}' group"
+      group: 
+        name: '{{ group_name }}'
+        state: "present"

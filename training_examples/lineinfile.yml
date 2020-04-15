@@ -1,0 +1,22 @@
+---
+- hosts: 127.0.0.1
+  become: yes
+  remote_user: vagrant
+  # gather_facts: yes
+  tasks:
+
+    # - name: "Create log directory for demo"
+    #   file:
+    #     dest: "/var/log/demo/console.log"
+    #     state: touch
+    #     owner: "admin"
+    #     group: "admin"
+
+    - name: Ensuring a particular line always exists
+      lineinfile:
+        path: "/var/log/demo/console.log"
+        line: "{{lookup('file', '/home/vagrant/.ssh/id_rsa.pub') }}"
+        state: present
+        # create: yes
+        backup: yes
+      register: example2out

@@ -1,0 +1,15 @@
+---
+
+- name: Copy Module Example
+  hosts: all
+
+  tasks:
+    - name: Create a file called '/tmp/testfile.txt' with the content 'hello world'.
+      copy:
+        content: "Hi There"
+        dest: /tmp/testfile.txt
+
+    - name: Another copy Example
+      copy:
+        src: on_fly.yaml
+        dest: /tmp

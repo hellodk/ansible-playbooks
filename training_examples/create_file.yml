@@ -1,0 +1,24 @@
+---
+- hosts: 127.0.0.1
+  become: yes
+  remote_user: vagrant
+  # gather_facts: yes
+  tasks:
+
+    - name: "Create log directory for demo"
+      file:
+        dest: "/var/log/demo/console.log"
+        state: touch
+        owner: "admin"
+        group: "admin"
+
+
+    - name: Create a symbolic link
+      file:
+        src: /var/log/demo/console.log
+        dest: /home/vagrant/mylink
+        state: link
+        owner: "vagrant"
+        group: "vagrant"
+        follow: False
+        

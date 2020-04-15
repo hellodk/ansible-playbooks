@@ -1,0 +1,34 @@
+---
+- hosts: all
+  become: no
+  tasks:
+    - set_fact: one_fact="something"
+
+    - name: Print one_fact and other_fact
+      debug:
+        msg: "{{ one_fact }}"
+      run_once: true
+
+    - set_fact:
+         myvar1: "Dummy Data"
+         myvar2: 2
+         myvar3: 5
+    
+    - set_fact:
+        stored_var_1: "First Data"
+        stored_var_2: "Second Data"
+        cacheable: yes
+    
+    - set_fact:
+        one_fact: yes
+        other_fact: no
+
+    - name: Print one_fact and other_fact
+      debug:
+        msg: "{{ item }}"
+      run_once: true
+      with_items:
+        - one_fact
+        - other_fact
+        - stored_var_1
+        - stored_var_2

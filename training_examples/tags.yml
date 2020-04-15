@@ -1,0 +1,16 @@
+---
+- hosts: 127.0.0.1
+  become: yes
+  remote_user: vagrant
+  tasks:
+
+    - name: Install nginx
+      package:
+        name: nginx
+        state: installed
+
+
+
+  handlers:
+    - name: Restart nginx
+      service: name=nginx state=restarted

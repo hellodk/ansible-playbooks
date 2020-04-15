@@ -1,0 +1,58 @@
+---
+- hosts: all
+  become: yes
+  remote_user: vagrant
+  tasks:
+
+    - name: "Print OS"
+      command: "cat /etc/os-release"
+      when: ansible_facts['os_family'] == "Debian"
+
+    - name: "Print OS if Redhat family"
+      command: "cat /etc/os-release"
+      when: ansible_facts['os_family'] == "Redhat"
+
+    - name: "shut down CentOS 6 and Debian 7 systems"
+      command: /sbin/shutdown -t now
+      when: (ansible_facts['distribution'] == "CentOS" and ansible_facts['distribution_major_version'] == "6") or
+            (ansible_facts['distribution'] == "Debian" and ansible_facts['distribution_major_version'] == "7")
+  
+    - name: "shut down CentOS 6 systems"
+      command: /sbin/shutdown -t now
+      when:
+        - ansible_facts['distribution'] == "CentOS"
+        - ansible_facts['distribution_major_version'] == "6"
+
+    - name: Checking for boolean data in myvariable
+      shell: hostname
+      ignore_errors: yes
+      when: myvariable
+
+    - name: Executes only if myvariable is defined
+      debug: msg={{ myvariable }}
+      when: myvariable is defined
+      run_once: true
+
+    - name: Setting facts
+      set_fact: myvar="some data"
+      # when: myvariable is not defined
+
+    - name: Executing commands and ignoring errors and storing results
+      # command: "hostname"
+      command: /bin/false
+      register: result
+      ignore_errors: True
+      # when: myvariable is defined
+  
+    - name: After it failed, I get executed
+      command: echo "After it failed, I get executed"
+      when: result is failed
+
+    - name: After it succeeds, I get executed
+      command: echo "Executes after success"
+      when: result is succeeded
+  
+    - name: After it skips, I get executed
+      command: echo "Seems result was skipped"
+      when: result is skipped
+        

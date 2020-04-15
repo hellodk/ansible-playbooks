@@ -1,0 +1,25 @@
+---
+- hosts: all
+  become: yes
+  remote_user: vagrant
+  tasks:
+
+    - name: Parsing the template file
+      template: src=sample_template.j2 dest=/home/vagrant/rendered_file
+
+    - name: "Copy files"
+      template:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        owner: "admin"
+        group: "admin"
+      with_items:
+        - { src: 'template1.j2', dest: '/home/vagrant/rendered_file_1' }
+        - { src: 'template2.j2', dest: '/home/vagrant/rendered_file_2'}
+    
+    - name: Create MyId files for admin
+      copy:
+        content={{ item.0 + 1 }}
+        dest=/home/vagrant/incremented_file
+      with_indexed_items: "{{groups['slaves']}}"
+      when: item.1 == "{{inventory_hostname}}"

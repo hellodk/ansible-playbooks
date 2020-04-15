@@ -1,0 +1,11 @@
+---
+- hosts: 127.0.0.1
+  become: yes
+  remote_user: vagrant
+  # gather_facts: yes
+  tasks:
+
+    - name: "Create admin group"
+      group: 
+        name: "admin11"
+        state: "present"
