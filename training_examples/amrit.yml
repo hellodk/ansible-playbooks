@@ -1,0 +1,30 @@
+---
+- hosts: vbcs
+  become: true
+  become_method: pbrun
+  gather_facts: false
+  become_flags: ' oci-avbcs-root -u root '
+  tasks:
+
+    - name: running shell
+      shell:
+        "ls -ltr"
+      register: dirPath
+
+      # - name: Fetch wls logs to local
+      #fetch:
+      #  src: "{{ item }}"
+      #  dest: .
+      #  with_items: "{{ dirPath.stdout_lines }}"
+        #remote_src: yes
+
+    - name: Bringing File Here
+      copy:
+        src: "{{item}}"
+        dest: .
+        remote_src: yes
+      with_items: "{{ dirPath.stdout_lines }}"
+
+    - name: Providing output
+      debug: msg="{{item}}"
+      with_items: "{{ dirPath.stdout_lines }}"

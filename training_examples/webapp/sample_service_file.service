@@ -1,0 +1,14 @@
+[Unit]
+Description=This is the start up script for the gojek mtric collector service
+
+[Service]
+Type=forking
+PIDFile=/tmp/pyinotify.pid
+ExecStart=/usr/bin/python /opt/metric_collector/daemon.py
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=1
+Restart=on-failure
+RestartSec=42s
+
+[Install]
+WantedBy=multi-user.target
