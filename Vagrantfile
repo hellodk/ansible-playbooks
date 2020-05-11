@@ -52,7 +52,7 @@ end
 
   config.vm.define "ansibles3" do |ansibles3|
     ansibles3.vm.box = "centos/7"
-    ansibles3.vm.hostname = 'ansibles1'
+    ansibles3.vm.hostname = 'ansibles3'
     ansibles3.vm.network :private_network, ip: "192.168.10.33"
     ansibles3.vm.provider :virtualbox do |v|
       v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
