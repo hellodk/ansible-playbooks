@@ -13,7 +13,7 @@ SCRIPT
 
 Vagrant.configure("2") do |config|
 config.vm.provision "shell", inline: $script
-config.vm.synced_folder "/home/dk/Dropbox/trainings/ansible", "/home/vagrant/synced_folder", :mount_options => ["dmode=777", "fmode=666"]
+config.vm.synced_folder ".", "/home/vagrant/synced_folder", :mount_options => ["dmode=777", "fmode=666"]
 #config.vm.synced_folder "/home/dk/Documents/git/kubespray", "/home/vagrant/local_git", :mount_options => ["dmode=777", "fmode=666"]
   config.vm.define "ansiblem" do |ansiblem|
     ansiblem.vm.box = "centos/7"
