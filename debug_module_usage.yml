@@ -1,13 +1,14 @@
 ---
-- hosts: 127.0.0.1
+- hosts: slaves
   become: yes
-  remote_user: centos
+  remote_user: vagrant
   tasks:
 
     - name: "Create admin group"
       group:
         name: "admin"
         state: "present"
+
 
     - name: "Create admin user - 'admin_user'"
       user:
@@ -16,7 +17,7 @@
         home: "/home/admin"
         comment: "admin user"
         shell: "/bin/bash"
-        state: "present"  
+        state: "present"
 
     - name: "Create directory /etc/sudoers.d"
       file:

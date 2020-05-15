@@ -1,0 +1,30 @@
+---
+- hosts: all
+  become: yes
+  remote_user: vagrant
+  tasks:
+
+    - name: Add the docker repo
+      get_url:
+        url: https://download.docker.com/linux/centos/docker-ce.repo
+        dest: /etc/yum.repos.d/docker-ce.repo
+    
+    - name: Install utilities
+      package:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - yum-utils
+        - device-mapper-persistent-data
+        - lvm2
+    
+    - name: Install docker-ce
+      package:
+        name: docker-ce
+        state: present
+    
+    - name: Start and enable docker
+      service:
+        name: docker
+        state: started
+        enabled: yes
