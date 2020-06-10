@@ -1,0 +1,48 @@
+---
+# tasks file for exer
+
+
+# cp app.py webapp
+# cp requirements.txt webapp
+# sudo apt install python-pip -y
+# sudo pip install flask
+# python app.py
+
+- name: Creating the webapp directory
+  file:
+    dest: /home/vagrant/webapp
+    state: directory
+    owner: vagrant
+    group: vagrant
+
+
+- name: Copy files
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - { src: 'app.py', dest: '/home/vagrant/webapp' }
+    - { src: 'requirements.txt', dest: '/home/vagrant/webapp' }
+
+- name: Install python-pip
+  package:
+    name: python-pip
+    state: present
+#  update_cache: yes
+
+- name: pip install requirements.txt
+  pip:
+    requirements: /home/vagrant/webapp/requirements.txt
+
+- name: Copy service files
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items:
+    - { src: 'sample_service_file.service', dest: '/etc/systemd/system/webapp.service' }
+
+- name: Start the service webapp
+  service:
+    name: webapp
+    state: started
+    enabled: true

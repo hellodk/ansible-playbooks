@@ -1,0 +1,49 @@
+helm env
+helm plugin list
+cd /home/vagrant/.cache/helm/plugins
+
+mkdir hello
+cd hello
+
+cat <<EOF> plugin.yaml
+name: "hello"
+version: "0.1.0"
+usage: "Say hello"
+description: |-
+  This is a demonstration plugin that prints Hello and then exists.
+command: "env"
+EOF
+
+cd ..
+helm plugin install hello
+helm hello
+
+
+cd ~
+mkdir edge
+cd edge
+
+cat <<EOF> plugin.yaml
+name: "edge"
+version: "0.1.0"
+usage: "Do Something"
+description: |-
+  This is a demonstration plugin that executes a script and then exists.
+command: "$HELM_PLUGIN_DIR/dosomething.sh"
+EOF
+
+cat <<EOF> dosomething.sh
+#!/bin/bash
+echo "Hello from a Helm plugin"
+echo "PARAMS"
+echo $*
+echo "ENVIRONMENT"
+env
+echo $HELM_HOME
+EOF
+
+chmod 777 dosomething.sh
+cd ..
+helm plugin install edge
+helm edge
+helm plugin remove edge

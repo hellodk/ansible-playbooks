@@ -1,0 +1,85 @@
+- hosts: localhost
+
+  tasks:
+    - name: Test that my hello_world module works
+      hello_world: 
+      register: result
+
+    - debug: var=result 
+
+    - name: Create a k8s namespace
+      k8s:
+        name: demo
+        api_version: v1
+        kind: Namespace
+        state: present
+
+
+    - name: Create a Service object from an inline definition
+      k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Service
+          metadata:
+            name: ghost
+            namespace: demo
+            labels:
+              app: ghost
+              service: ghost
+          spec:
+            selector:
+              app: ghost
+              service: ghost
+            ports:
+            - protocol: TCP
+              targetPort: 2368
+              name: port-2368-tcp
+              port: 2368
+
+    - name: Create a Service object by reading the definition from a file
+      k8s:
+        state: present
+        src: /demo/service.yml
+    
+    - name: Remove an existing Service object
+      k8s:
+        state: absent
+        api_version: v1
+        kind: Service
+        namespace: demo
+        name: web
+    
+    # Passing the object definition from a file
+    
+    - name: Create a Deployment by reading the definition from a local file
+      k8s:
+        state: present
+        src: /demo/deployment.yml
+    
+    - name: >-
+        Read definition file from the Ansible controller file system.
+        If the definition file has been encrypted with Ansible Vault it will automatically be decrypted.
+      k8s:
+        state: present
+        definition: "{{ lookup('file', '/demo/deployment.yml') }}"
+    
+    - name: Read definition file from the Ansible controller file system after Jinja templating
+      k8s:
+        state: present
+        definition: "{{ lookup('template', '/demo/deployment.yml') }}"
+    
+    - name: fail on validation errors
+      k8s:
+        state: present
+        definition: "{{ lookup('template', '/demo/deployment.yml') }}"
+        validate:
+          fail_on_error: yes
+    
+    - name: warn on validation errors, check for unexpected properties
+      k8s:
+        state: present
+        definition: "{{ lookup('template', '/demo/deployment.yml') }}"
+        validate:
+          fail_on_error: no
+          strict: yes
