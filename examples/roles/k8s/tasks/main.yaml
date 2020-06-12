@@ -2,8 +2,8 @@
   file:
     state: directory
     path: /mnt
-    owner: 472
-    group: 472
+    owner: '472'
+    group: '472'
 
 - name: Create a k8s namespace
   k8s:
