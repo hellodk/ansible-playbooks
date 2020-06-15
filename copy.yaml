@@ -6,9 +6,9 @@
 
 
     - name: "Create hellodk group"
-      group: >
-        name="hellodk"
-        state="present"
+      group:
+        name: "hellodk"
+        state: "present"
 
     - name: "Create hellodk user - 'hellodk_user'"
       user:

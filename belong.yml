@@ -5,10 +5,10 @@
   tasks:
 
     - name: Install apt-package dependencies
-      apt: >
-        name="{{ item }}"
-        state="present"
-        force=yes
+      apt:
+        name: "{{ item }}"
+        state: "present"
+        force: yes
       with_items:
         - python-pip
         - supervisor
@@ -16,37 +16,39 @@
         - nginx 
 
     - name: Copy the requirements.txt file to tmp directory
-      copy: src="requirements.txt" dest="/tmp"
+      copy:
+        src: "requirements.txt"
+        dest: "/tmp"
 
     - name: Create belong log directory
-      file: >
-      path="//var/log/belong/"
-      state="directory"
-      owner=runuser
-      group=runuser
-      mode=0755
+      file:
+      path: "//var/log/belong/"
+      state: "directory"
+      owner: runuser
+      group: runuser
+      mode: 0755
 
     - name: Installing pip requirements.
-      pip: requirements="/tmp/requirements.txt"  
+      pip:
+        requirements: "/tmp/requirements.txt"  
 
     - name: Copy the supervisor configuration file for gunicorn
-      copy: >
-        src=gunicorn_process.conf
-        dest=/etc/supervisor/conf.d/gunicorn_process.conf
+      copy:
+        src: gunicorn_process.conf
+        dest: /etc/supervisor/conf.d/gunicorn_process.conf
 
     - name: Copy the nginx configuration
-      copy: >
-        src=web_app_nginx_conf
-        dest=/etc/nginx/sites-available/web_app
+      copy:
+        src: web_app_nginx_conf
+        dest: /etc/nginx/sites-available/web_app
 
     - name: Create softlink for sites-enabled
-      file: >
-        src=/etc/nginx/sites-available/web_app
-        dest=/etc/nginx/sites-enabled/web_app
-        state=link
-        owner=runuser
-        group=runuser
+      file:
+        src: /etc/nginx/sites-available/web_app
+        dest: /etc/nginx/sites-enabled/web_app
+        state: link
+        owner: runuser
+        group: runuser
 
     - name: Restart nginx
-      service: name=nginx state=restarted
-
+      service: name: nginx state: restarted

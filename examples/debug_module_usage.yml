@@ -40,14 +40,6 @@
     - name: Printing the value for "{{ ntp_server }}"
       debug: msg="{{ ntp_server }}"
 
-    # - name: Template testing
-    #   template:
-    #     src="issue.j2"
-    #     dest="/tmp/issue"
-    #     owner="root"
-    #     group="root"
-    #     mode="0400"
-
     - name: Getting hostvars
       debug: msg="System {{ hostvars }}"
       register: my_result

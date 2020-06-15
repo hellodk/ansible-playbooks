@@ -2,12 +2,13 @@
 - hosts: all
   become: no
   remote_user: centos
+  # gather_facts: yes
   tasks:
 
     - name: "Create key pair"
       openssh_keypair:
-        path: '{{ ansible_user_dir }}/.ssh/id_rsa'
-      delegate_to: localhost
+        path: '{{ ansible_user_dir }}/.ssh/id_rsa' # /home/centos/.ssh/id_rsa
+      delegate_to: localhost #127.0.0.1
 
     - debug: msg="the value of foo.txt is {{lookup('file', '{{ ansible_user_dir }}' + '/.ssh/id_rsa.pub') }}"
     - debug: msg='{{ ansible_user_dir }}'
@@ -18,4 +19,3 @@
         line: "{{lookup('file', '{{ ansible_user_dir }}' + '/.ssh/id_rsa.pub') }}"
         state: present
         backup: yes
-      register: example2out
