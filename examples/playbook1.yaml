@@ -2,6 +2,7 @@
 - hosts: all
   become: true
   serial: 2
+  max_fail_percentage: 30
 
   vars:
     ansible_become_pass: vagrant
@@ -9,7 +10,7 @@
   tasks:
 
     - name: install ntp
-      apt:
+      package:
         pkg: ntp
         state: present
       tags:
@@ -19,7 +20,7 @@
 
 
     - name: install vim
-      apt:
+      package:
         pkg: vim
         state: present
       tags:
@@ -37,12 +38,12 @@
   handlers:
 
     - name: run update
-      apt:
+      package:
         update_cache: "yes"
 
 
     - name: run update 2
-      apt:
+      package:
         update_cache: "yes"
 
     # - name: restart apache
