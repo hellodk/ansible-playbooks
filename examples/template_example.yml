@@ -5,7 +5,7 @@
   tasks:
 
     - name: Parsing the template file
-      template: src=sample_template.j2 dest=/home/vagrant/rendered_file
+      template: src=sample_template.j2 dest='{{ ansible_user_dir }}/rendered_file'
 
     - name: "Copy files"
       template:
@@ -14,8 +14,8 @@
         owner: "admin"
         group: "admin"
       with_items:
-        - { src: 'template1.j2', dest: '/home/vagrant/rendered_file_1' }
-        - { src: 'template2.j2', dest: '/home/vagrant/rendered_file_2'}
+        - { src: 'template1.j2', dest: '{{ ansible_user_dir }}/rendered_file_1' }
+        - { src: 'template2.j2', dest: '{{ ansible_user_dir }}/rendered_file_2'}
     
     - name: Create MyId files for admin
       copy:
