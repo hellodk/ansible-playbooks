@@ -1,11 +1,11 @@
 ---
 - hosts: 127.0.0.1
   become: yes
-  remote_user: vagrant
+  remote_user: centos
   # gather_facts: yes
   tasks:
 
     - name: "Create admin group"
       group: 
-        name: "admin11"
+        name: "admin"
         state: "present"

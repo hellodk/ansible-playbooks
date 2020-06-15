@@ -1,7 +1,7 @@
 ---
 - hosts: 127.0.0.1
   become: yes
-  remote_user: vagrant
+  remote_user: centos
   # gather_facts: yes
   tasks:
 
@@ -16,9 +16,9 @@
     - name: Create a symbolic link
       file:
         src: /var/log/demo/console.log
-        dest: /home/vagrant/mylink
+        dest: /home/centos/mylink
         state: link
-        owner: "vagrant"
-        group: "vagrant"
+        owner: "centos"
+        group: "centos"
         follow: False
         
