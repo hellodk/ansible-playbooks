@@ -10,10 +10,14 @@
         - 6
         - 8
         - 7
+        - 40 # change to 80 and see the results
       register: _create_instances
       async: 600  # Maximum runtime in seconds. Adjust as needed.
       poll: 0  # Fire and continue (never poll)
  
+    - name: Print the results
+      debug: msg="{{ _create_instances }}"
+
     - name: Wait for creation to finish
       async_status:
         jid: "{{ item.ansible_job_id }}"
