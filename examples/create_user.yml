@@ -1,13 +1,13 @@
 ---
 - hosts: all
   become: yes
-  remote_user: centos
+  remote_user: vagrant
   # gather_facts: yes
   tasks:
 
-    - name: "Create admin user"
+    - name: "Create Bhardwaj user"
     # - name: "Create admin '{{ user }}' "
       user: 
-        name: "admin"
+        name: "Bhardwaj"
         # name: '{{ user }}'
         state: "present"
