@@ -1,0 +1,90 @@
+Upgrading an application using Helm
+
+helm install --name my-mysqlrelease stable/mysql
+helm ls
+helm status my-mysqlrelease
+
+Upgrade the release with a newer chart version when available
+helm upgrade my-mysqlrelease stable/mysql
+
+upgrade to a specific version of the application
+helm upgrade my-mysqlrelease stable/mysql --version 1.2.0
+helm ls
+
+history of revisions using the following command
+helm history my-mysqlrelease stable/mysql
+
+Use the helm upgrade function to update a parameter on an existing release by specifying a parameter using the --set key=value[,key=value] argument
+helm upgrade my-mysqlrelease stable/mysql --version 1.2.0 --set mysqlRootPassword="MyNevvPa55w0rd"
+
+Confirm that the password is actually updated
+kubectl get secret --namespace default my-mysqlrelease -o jsonpath="{.data.mysql-root-password}" | base64 --decode; echo
+MyNevvPa55w0rd
+
+Rollback:
+---------
+helm history my-mysqlrelease
+
+helm rollback my-mysqlrelease 4
+
+helm history my-mysqlrelease
+
+Delete the application:
+-----------------------
+helm ls --all
+
+helm delete --purge my-mysqlrelease
+
+Listing Repositories:
+---------------------
+helm repo --list
+
+What are the other types of helm repo?
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo add banzaicloud-stable https://kubernetes-charts.banzaicloud.com/branch/master
+helm repo list
+
+Install with default values
+helm install banzaicloud-stable/logging-operator
+
+Install with custom yaml file
+helm install banzaicloud-stable/logging-operator -f example.yaml
+
+Install with value overrides
+helm install banzaicloud-stable/logging-operator --set rbac.enabled=false
+
+Chart Locations:
+----------------
+https://github.com/bitnami/charts/tree/master/bitnami
+
+
+Building Helm Charts:
+---------------------
+Create a chart
+helm create mychart
+
+Test for errors
+helm lint ./mychart
+
+Dry run
+helm install ./mychart --debug --dry-run
+
+Make a helm package
+helm package .
+
+Push to helm server
+cd mychart && curl --data-binary "@mychart-0.1.0.tgz" http://10.3.0.37:8080/api/charts
+
+Structure:
+----------
+mychart 
+├── Chart.yaml          --> Description of the chart
+├── charts              --> Directory for chart dependencies
+├── mychart-0.1.0.tgz   --> Packaged chart following the SemVer 2 standard
+├── templates           --> Directory for chart templates
+│   ├── NOTES.txt       --> Help text displayed to users
+│   ├── _helpers.tpl    --> Helpers that you can re-use 
+│   ├── deployment.yaml --> Application - example deployment
+│   ├── service.yaml    --> Application - example service endpoint
+└── values.yaml         --> Default values for a chart
+

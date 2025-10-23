@@ -1,0 +1,27 @@
+---
+- hosts: 127.0.0.1
+  become: yes
+  remote_user: vagrant
+  # gather_facts: yes
+  tasks:
+    - name: Install mkpasswd
+      package:
+        name: whois
+        state: present
+
+    - name: Create password
+      command: 
+        name: whois
+        state: present
+
+
+    - name: Create user with locked password
+      user:
+        name: tuvok
+        comment: "Tuvok"
+
+    - name: Unlock password and set it to empty
+      command: passwd -d tuvok
+
+    - name: Expire password
+      command: chage -d 0 tuvok

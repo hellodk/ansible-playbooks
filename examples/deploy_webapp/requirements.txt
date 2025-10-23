@@ -1,0 +1,7 @@
+Django
+Jinja2
+gunicorn
+requests
+six
+ssh-import-id
+urllib3

@@ -1,0 +1,73 @@
+- name: Create the directory
+  file:
+    state: directory
+    path: /mnt
+    owner: '472'
+    group: '472'
+
+- name: Create a k8s namespace
+  k8s:
+    name: demo
+    api_version: v1
+    kind: Namespace
+    state: present
+
+- name: Create a Service object from an inline definition
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: ghost
+        namespace: demo
+        labels:
+          app: ghost
+          service: ghost
+      spec:
+        selector:
+          app: ghost
+          service: ghost
+        ports:
+        - protocol: TCP
+          targetPort: 2368
+          name: port-2368-tcp
+          port: 2368
+
+- name: Deploy prometheus
+  k8s:
+    state: present
+    definition: '{{ item }}'
+  with_items:
+    - "{{ lookup('file', 'prometheus/namespace.yaml')}}"
+    - "{{ lookup('file', 'prometheus/cluster-role.yaml')}}"
+    - "{{ lookup('file', 'prometheus/config-map.yaml')}}"
+    - "{{ lookup('file', 'prometheus/deployment.yaml')}}"
+ 
+- name: Deploy grafana
+  k8s:
+    state: present
+    definition: '{{ item }}'
+  with_items:
+    - "{{ lookup('file', 'grafana/grafana-claim-persistentvolumeclaim.yaml') }}"
+    - "{{ lookup('file', 'grafana/grafana-deployment.yaml') }}"
+    - "{{ lookup('file', 'grafana/grafana-ip-service.yaml') }}"
+
+# - name: Create a Service object by reading the definition from a file
+#   k8s:
+#     state: present
+#     src: service.yml
+
+# - name: Remove an existing Service object
+#   k8s:
+#     state: absent
+#     api_version: v1
+#     kind: Service
+#     namespace: demo
+#     name: web
+#     # Passing the object definition from a file
+
+# - name: Create a Deployment by reading the definition from a local file
+#   k8s:
+#     state: present
+#     src: /demo/deployment.yml

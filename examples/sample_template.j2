@@ -1,0 +1,32 @@
+{% if id is defined %}
+broker.id={{ id }}
+{% endif %}
+
+advertised.host.name={{ inventory_hostname }}
+
+
+connect={{ groups["slaves"] | join(":2181,") }}:2181
+
+{% for i in range(0, groups['slaves']|length) %}
+server.{{ i+1 }}={{ groups['slaves'][i] }}:2888:3888
+{% endfor %}
+
+
+{% for host in groups['slaves'] %}
+{{ host }}
+{% endfor %}
+
+Printing more magic variables below:
+{{ inventory_hostname }}
+{{ play_hosts }}
+{{ inventory_dir }}
+{{ inventory_file }}
+
+Ansible template for loop example
+{% for i in range(3)%}
+  This is the {{ i }}th variable
+{% endfor %}
+
+{% for i in range(3) %}
+  variable {{ i }}
+{%- endfor %}

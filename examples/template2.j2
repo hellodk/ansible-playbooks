@@ -1,0 +1,9 @@
+dataDir=/var/lib/abc
+clientPort=2181
+maxClientCnxns=200
+tickTime=2000
+{% for i in range(0, groups['slaves']|length) %}
+server.{{ i+1 }}={{ groups['slaves'][i] }}:2888:3888
+{% endfor %}
+initLimit=20
+syncLimit=10

@@ -1,0 +1,11 @@
+[windows]
+192.168.10.35
+192.168.10.36
+
+[windows:vars]
+ansible_user="vagrant"
+ansible_password="vagrant"
+ansible_connection="winrm"
+ansible_port="5986"
+ansible_winrm_transport="ntlm"
+ansible_winrm_server_cert_validation="ignore"

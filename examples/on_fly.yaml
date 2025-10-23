@@ -1,0 +1,68 @@
+---
+- hosts: all
+  become: true
+  vars:
+#    app_name: "XYZ"
+    app_user: "vagrant"
+    app_user_group: "vagrant"
+    one_more_var: "my value"
+  tasks:
+
+    # - name: 'Assigning valaues as values were not defined'
+    #   set_fact: app_name="new app"
+    #   when: app_name is not defined
+
+    - name: 'Check mandatory variables are defined'
+      assert:
+        that:
+          - app_name is defined
+          - app_user is defined
+          - app_user_group is defined
+    
+
+
+#     - shell: cat /some/path/to/multidoc-file.yaml
+#     register: result
+#   - debug:
+#       msg: '{{ item }}'
+#     loop: '{{ result.stdout | from_yaml_all | list }}'
+
+# Forcing Variables To Be Defined
+# {{ variable | mandatory }}
+
+#     - name: Executing uptime 
+#       shell: uptime
+#       register: result
+#       ignore_errors: True
+    
+#     - name: Printing "It Failed"
+#       debug: msg="it failed"
+#       when: "'FAILED' in command_result.stderr"
+    
+#     - name: Printing "It changed"
+#       debug: msg="it changed"
+#       when: result|changed
+    
+#     - name: Printing "It succeeded"
+#       debug: msg="it succeeded in Ansible >= 2.1"
+#       when: result|succeeded
+    
+#     - name: Printing "success"
+#       debug: msg="it succeeded"
+#       when: result|success
+    
+#     - name: Printing a message
+#       debug: msg="it was sk"
+
+#     - name: Executing shell command and storing the result
+#       shell: cat /home/vagrant/rendered_file
+#       register: result
+    
+#     - name: Setting facts
+#       set_fact: myvar="{{ result.stdout | from_json }}"
+
+#     - name: Printing result variable
+#       debug: msg={{ result }}
+
+#     - name: Printing myvar variable
+#       debug: msg={{ myvar }}

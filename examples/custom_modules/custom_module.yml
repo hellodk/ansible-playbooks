@@ -1,0 +1,21 @@
+---
+- hosts: 127.0.0.1
+  user: dk
+  gather_facts: no
+  connection: local
+
+  tasks:
+
+    - name: 'Calling test_module'
+      test_module:
+        name: "Hello World!"
+
+    - name: 'Calling success via test_module'
+      test_module:
+        name: "success is yes"
+        success: yes
+
+    - name: 'Calling fail via test_module'
+      test_module:
+        names: "Success is no"
+        success: no

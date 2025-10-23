@@ -1,0 +1,6 @@
+{% if id is defined %}
+broker.id={{ id }}
+{% endif %}
+
+advertised.host.name={{ inventory_hostname }}
+connect={{ groups["slaves"] | join(":2181,") }}:2181

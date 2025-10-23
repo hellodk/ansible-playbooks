@@ -1,0 +1,1 @@
+{ "state": "green","backup": "complete", "data": "Hello from {{ inventory_hostname}} " }

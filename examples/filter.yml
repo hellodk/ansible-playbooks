@@ -1,0 +1,54 @@
+---
+- hosts: all
+  become: yes
+  remote_user: vagrant
+  vars:
+    my_name: Oracle
+    first_nme:
+
+  tasks:
+    
+    - debug:
+      #Here we are just printing out the variable value for verification
+        msg: "This is my name as usual is: '{{ my_name }}'"
+      run_once: true
+    
+    - debug:
+      #Here are converting string into uppercase
+        msg: "This is my name in upper case: '{{ my_name|upper }}'"
+      run_once: true
+    
+    - debug:
+      #Here are are converting string into Lower case
+        msg: "This is my name in Lower case: '{{ my_name|lower }}'"
+      run_once: true
+    
+    - debug:
+      #Here are converting string into Title case
+        msg: "This is my name in Title case: '{{ my_name|title}}'"
+      run_once: true
+    
+    - debug:
+      #Here are replacing string with other string
+        msg: "This is replacing example: '{{ my_name|replace('Oracle','Oracle1')}}'"
+      run_once: true
+    
+    - debug:
+      #Here are placing default value for variable first_nme to Manmohan if its NULL.
+        msg: "The Name is:  '{{ first_name|default('Manmohan') }} {{ my_name }}' "
+      run_once: true
+
+    - name: Print Interfaces
+      debug:
+         msg: "{{ ansible_interfaces | select('match', '^(eth|wlan)[0-9]+') | list }}"
+      run_once: true
+
+    - name: print interfaces
+      debug:
+         msg: "{{ ansible_interfaces | map('upper') | list }}"
+      run_once: true
+
+    - name: print interfaces
+      debug:
+         msg: "{{ ansible_interfaces + [\"VETH-1\", \"VETH-2\"] }}"
+      run_once: true

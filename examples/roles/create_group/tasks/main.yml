@@ -1,0 +1,8 @@
+---
+# tasks file for create_group
+
+
+- name: Create a group
+  group:
+    name: demo
+    state: present

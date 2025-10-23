@@ -1,0 +1,39 @@
+---
+- hosts: all
+  become: true
+  vars:
+#    app_name: "XYZ"
+    app_user: "vagrant"
+    app_user_group: "vagrant"
+    one_more_var: "my value"
+  tasks:
+
+    - name: apt-update
+      apt:
+        update_cache: yes
+    
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+    
+    - name: Create new directory
+      file:
+        path: /home/vagrant/Downloads/dockDeploy
+        state: directory
+    
+    - name: Copy war file
+      copy:
+        src: /home/vagrant/Downloads/addressbook.war
+        dest: /home/vagrant/Downloads/dockDeploy/
+    
+    - name: Copy Dockerfile
+      copy:
+        src: /home/vagrant/Downloads/Dockerfile
+        dest: /home/vagrant/Downloads/dockDeploy/
+    
+    - name: Build Docker Image
+      command: chdir=/home/vagrant/Downloads/dockDeploy/ docker build . -t vagrant/inclass
+    
+    - name: Run Docker Container
+      command: chdir=/home/vagrant/Downloads/dockDeploy/ docker run -it -d -p 8085:8080 vagrant/inclass

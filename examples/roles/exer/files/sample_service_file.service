@@ -1,0 +1,14 @@
+[Unit]
+Description=This is the start up script for python app
+
+[Service]
+Type=simple
+PIDFile=/tmp/pyinotify.pid
+ExecStart=/usr/bin/python /home/vagrant/webapp/app.py
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=1
+Restart=on-failure
+RestartSec=42s
+
+[Install]
+WantedBy=multi-user.target

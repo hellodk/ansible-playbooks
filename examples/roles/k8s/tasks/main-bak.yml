@@ -1,0 +1,288 @@
+---
+# tasks file for k8s
+Docker Installation:
+--------------------
+yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+yum update -y
+yum install -y yum-utils device-mapper-persistent-data lvm2 -y
+sudo yum install docker-ce -y
+
+Start and enable Docker:
+------------------------
+systemctl enable docker
+systemctl start docker
+systemctl status docker
+docker version
+
+Installing kubelet, kubeadm, kubectl:
+-------------------------------------
+cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
+        https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+EOF
+
+yum install -y kubelet-1.15.1 kubeadm-1.15.1 kubectl-1.15.1
+systemctl enable kubelet
+systemctl start kubelet
+
+kubeadm init --apiserver-advertise-address=172.31.31.147 --pod-network-cidr=10.244.0.0/16 --service-cidr=10.245.0.0/18
+
+or
+
+kubeadm init --apiserver-cert-extra-sans=172.31.26.113,13.235.84.89 --pod-network-cidr=10.244.0.0/16 --service-cidr=10.244.0.0/24 --apiserver-advertise-address=172.31.26.113
+
+Become Non-root user:
+---------------------
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+Creating the CNI and Dashboard:
+-------------------------------
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-beta8/aio/deploy/recommended.yaml
+
+kubectl -n kubernetes-dashboard edit service kubernetes-dashboard
+
+change from ClusterIP to NodePort
+
+kubectl get svc kubernetes-dashboard -n kubernetes-dashboard
+
+kubectl apply -f dash.yml
+
+kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep admin-user | awk '{print $1}')
+
+Admin Account for Kubernetes dashboard:
+---------------------------------------
+kubectl create serviceaccount cluster-admin-dashboard-sa
+kubectl create clusterrolebinding cluster-admin-dashboard-sa --clusterrole=cluster-admin --serviceaccount=default:cluster-admin-dashboard-sa
+kubectl get secret | grep cluster-admin-dashboard-sa
+kubectl describe secret cluster-admin-dashboard-sa-token-6xm8l
+
+Contexts:
+---------
+
+kubectl config set-context demo --namespace=demo --user=kubernetes-admin --cluster=kubernetes
+
+
+Labels:
+--------
+kubectl run app1-prod --image=hellodk/kuard-amd64:1 --replicas=2 --labels="ver=1,app=app1,env=prod"
+
+kubectl run app1-test --image=gcr.io/kuar-demo/kuard-amd64:2 --replicas=1 --labels="ver=2,app=app1,env=test"
+
+kubectl run app2-prod --image=gcr.io/kuar-demo/kuard-amd64:2 --replicas=2 --labels="ver=2,app=app2,env=prod"
+
+kubectl run app2-staging --image=gcr.io/kuar-demo/kuard-amd64:2 --replicas=1 --labels="ver=2,app=app2,env=staging"
+
+kubectl get deployments --show-labels
+
+Service Discovery:
+------------------
+kubectl run app1-prod --image=gcr.io/kuar-demo/kuard-amd64:1 --replicas=3 --port=8080 --labels="ver=1,app=app1,env=prod"
+
+kubectl expose deployment app1-prod
+
+kubectl run app2-prod --image=gcr.io/kuar-demo/kuard-amd64:2 --replicas=2 --port=8080 --labels="ver=2,app=app2,env=prod"
+
+kubectl expose deployment app2-prod
+
+Config Maps:
+------------
+Create my-config.txt file with below contents
+parameter1 = value1
+parameter2 = value2
+
+kubectl create configmap my-config --from-file=my-config.txt --from-literal=extra-param=extra-value --from-literal=another-param=another-value
+
+kubectl get configmaps my-config -o yaml
+
+kubectl apply -f kuard-config.yaml
+kubectl port-forward kuard-config 8080
+
+Secrets:
+--------
+curl -o kuard.crt  https://storage.googleapis.com/kuar-demo/kuard.crt
+curl -o kuard.key https://storage.googleapis.com/kuar-demo/kuard.key
+
+kubectl create secret generic kuard-tls --from-file=kuard.crt --from-file=kuard.key
+
+kuard-tls secret has been created with two data elements
+
+kubectl describe secrets kuard-tls
+
+kubectl apply -f kuard-secret.yaml
+
+kubectl port-forward kuard-tls 8443:8443
+
+Prometheus:
+-----------
+
+Grafana:
+--------
+grafana-deployment-75f9d6f4c5-2w92s
+
+
+Stateful:
+---------
+kubectl apply -f https://k8s.io/examples/application/cassandra/cassandra-service.yaml
+kubectl get svc cassandra
+kubectl apply -f https://k8s.io/examples/application/cassandra/cassandra-statefulset.yaml
+kubectl get statefulset cassandra
+kubectl get pods -l="app=cassandra"
+kubectl exec -it cassandra-0 -- nodetool status
+
+Mongo:
+------
+
+Redis:
+------
+kubectl create configmap --from-file=slave.conf=./slave.conf --from-file=master.conf=./master.conf --from-file=sentinel.conf=./sentinel.conf --from-file=init.sh=./init.sh --from-file=sentinel.sh=./sentinel.sh redis-config
+
+
+User Creation:
+--------------
+
+Ingress:
+---------
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/mandatory.yaml
+
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/baremetal/service-nodeport.yaml
+
+Security:
+---------
+Create a ServiceAccount, say 'readonlyuser'
+kubectl create serviceaccount readonlyuser
+
+Create cluster role, say 'readonlyuser'.
+kubectl create clusterrole readonlyuser --verb=get --verb=list --verb=watch --resource=pods
+
+Create cluster role binding, say 'readonlyuser'.
+kubectl create clusterrolebinding readonlyuser --serviceaccount=demo:readonlyuser --clusterrole=readonlyuser
+
+get the token from secret of ServiceAccount we created before
+use this token to authenticate user
+TOKEN=$(kubectl describe secrets "$(kubectl describe serviceaccount readonlyuser | grep -i Tokens | awk '{print $2}')" | grep token: | awk '{print $2}')
+
+set the credentials for the user in kube config file
+kubectl config set-credentials hellodk --token=$TOKEN
+
+Create a Context  podreader
+kubectl config set-context podreader --cluster=kubernetes --user=hellodk --namespace=demo
+
+use the context
+kubectl config use-context podreader
+
+Now execute the below commands to test
+kubectl get po
+kubectl get po --all-namespaces
+kubectl get sa
+
+Test your permissions
+kubectl auth can-i get pods --all-namespaces
+kubectl auth can-i create pods
+kubectl auth can-i delete pods
+---------------------------------------------
+
+Create certificate sign request admin.csr using the generated private key
+openssl req -new -key admin.key -out admin.csr -subj "/CN=admin/O=kubernetes"
+
+Approve the admin.csr by kubernetes CA and generate the final certificate
+sudo openssl x509 -req -in admin.csr -CA /etc/kubernetes/pki/ca.crt -CAkey /etc/kubernetes/pki/ca.key -CAcreateserial -out admin.crt -days 500
+
+ls -ltr
+-rw-rw-r-- 1 vagrant vagrant 1679 Feb 19 13:19 admin.key
+-rw-rw-r-- 1 vagrant vagrant  915 Feb 19 13:21 admin.csr
+-rw-rw-r-- 1 vagrant vagrant 1001 Feb 19 13:25 admin.crt
+
+Add a new context with the new credentials for our Kubernetes cluster
+
+kubectl config set-credentials admin --client-certificate=/home/centos/dumpyard/kubernetes/admin.crt  --client-key=/home/centos/dumpyard/kubernetes/admin.key
+
+kubectl config set-context admin --cluster=kubernetes --namespace=demo --user=admin
+
+kubectl --context=admin get pods
+
+kubectl get po
+
+we get access denied error when using the kubectl CLI
+we have not defined any permitted operations for this user
+
+
+Helm:
+-----
+helm repo list
+helm search redis
+helm search elasticsearch
+helm install stable/elasticsearch
+kubectl get pods --all-namespaces | grep tiller
+helm install stable/elasticsearch
+helm repo add elastic https://helm.elastic.co
+helm update
+helm install --name elasticsearch elastic/elasticsearch
+kubectl create serviceaccount --namespace kube-system tiller
+kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
+kubectl patch deploy --namespace kube-system tiller-deploy -p '{"spec":{"template":{"spec":{"serviceAccount":"tiller"}}}}'
+helm install --name elasticsearch elastic/elasticsearch
+history
+
+Printing custom outputs:
+------------------------
+kubectl get pods app2-staging-57977887c5-w9jwm -o custom-columns=Name:.metadata.resourceVersion
+kubectl get pods -o custom-columns=Name:.metadata.name
+kubectl get pods app2-staging-57977887c5-w9jwm -o custom-columns=Name:.metadata.resourceVersion
+
+sudo yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+
+sudo yum install -y jq
+
+jq -version
+kubectl get no -o json | jq -r '[.items[] | {name:.metadata.name}]'
+
+Pre-requisites:
+---------------
+
+1. disable selinux
+/etc/sysconfig/selinux
+
+or
+
+sed -i s/^SELINUX=.*$/SELINUX=disabled/ /etc/selinux/config
+
+2. set the dns for each node in /etc/hosts
+swapoff -a
+vim /etc/fstab
+
+or use the below command
+
+sudo sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
+
+3. Set net bridge  for proper traffic routing
+
+cat <<EOF >  /etc/sysctl.d/k8s.conf
+net.bridge.bridge-nf-call-ip6tables = 1
+net.bridge.bridge-nf-call-iptables = 1
+EOF
+
+4. Rload sysctl
+
+sysctl --system
+reboot  
+
+5. Set DNS entries in /etc/hosts:
+192.168.10.50 kubem
+192.168.10.51 worker1
+192.168.10.52 worker2
+
+- name: Set hostname
+  hostname:
+    name: "{{ hostname }}"
+
+

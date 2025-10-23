@@ -2,11 +2,12 @@
 - hosts: 192.168.122.1# this is the remote system ip, need to be replaced
 
   sudo: yes
-  remote_user: hellodk
+  remote_user: vagrant
   tasks:
    - apt_key: url="https://jenkins-ci.org/debian/jenkins-ci.org.key" state="present"
-   #- apt: deb=/tmp/mypackage.deb
+
    - name: Updates apt cache
      action: apt update_cache=true
+
    - name: install jenkins
      apt: name=jenkins state=present

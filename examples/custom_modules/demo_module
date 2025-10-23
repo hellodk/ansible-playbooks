@@ -1,0 +1,63 @@
+#!/usr/bin/python
+''' -*- coding: utf-8 -*-
+
+ Author: Deepak Gupta - @hellodk <hello.dk@outlook.com>
+
+ Sample ansible module to demonstrate code structure.
+
+
+---------- Documentation Starts Below -------------
+'''
+DOCUMENTATION = '''
+---
+version_added: "1.7"
+module: test_module
+short_description: test_module
+description:
+  - This module returns/displays a configured string
+options:
+  name:
+    description:
+      text message to print
+  success:
+    description:
+      If false, the module will exit with failure.
+    required: false
+    default: yes
+    choices: [ "yes", "no" ]
+notes:
+  - This module does not connect to host. It is a dummy module
+    required: true
+requirements: []
+author: Deepak Gupta - @hellodk
+'''
+
+EXAMPLES = '''
+- name: "testing module"
+  test_module: name="I executed successfully" success=yes
+'''
+
+#---- Logic Start ------------------------------------------------------------#
+
+
+def main():
+  # Note: 'AnsibleModule' is an Ansible utility imported below
+  module = AnsibleModule(
+      argument_spec=dict(
+          name=dict(required=True),
+          success=dict(default=True, type='bool'),
+      )
+
+  )
+  success = module.params['success']
+  text = module.params['name']
+  if success:
+    module.exit_json(msg=text)
+  else:
+    #module.fail_json(msg=text)
+    module.exit_json(msg=text)
+
+
+#---- Import Ansible Utilities (Ansible Framework) ---------------------------#
+from ansible.module_utils.basic import *
+main()

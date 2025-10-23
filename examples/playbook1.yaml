@@ -1,0 +1,75 @@
+---
+- hosts: all
+  become: false
+#  serial: 2
+
+# Specify the batch sizes  
+  # serial:
+  #   - 1
+  #   - 5
+  #   - 10
+
+# Set batch size as percentage
+  # serial:
+  #   - "10%"
+  #   - "20%"
+  #   - "100%"
+
+# Mix & Match the values  
+  # serial:
+  #   - 1
+  #   - 5
+  #   - "20%"  
+
+  max_fail_percentage: 10
+
+  vars:
+    ansible_become_pass: vagrant
+
+  tasks:
+
+    - name: Create a file
+      file:
+        path: '{{ ansible_user_dir }}/hello/false.txt'
+        state: touch
+ 
+    - name: install ntp
+      package:
+        pkg: ntp
+        state: present
+      tags:
+        - abc
+      notify:
+        - run update
+
+
+    - name: install vim
+      package:
+        pkg: vim
+        state: present
+      tags:
+        - abc
+        - ijk
+
+    - name: start ntp service
+      service:
+        name: ntpd
+        state: started
+        enabled: true
+      tags:
+        - xyz
+
+  handlers:
+
+    - name: run update
+      package:
+        update_cache: "yes"
+
+
+    - name: run update 2
+      package:
+        update_cache: "yes"
+
+    # - name: restart apache
+    #   service:
+    #     name: "apache2/httpd"

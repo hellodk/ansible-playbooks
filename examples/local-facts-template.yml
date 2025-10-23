@@ -1,0 +1,16 @@
+---
+- hosts: all
+  become: "yes"
+
+  tasks:
+    - name: create directory for ansible custom facts
+      file: state=directory recurse=yes path=/etc/ansible/facts.d
+    
+    - name: install custom impi fact
+      template: src=ipmi.fact dest=/etc/ansible/facts.d
+    
+    - name: re-read facts after adding custom fact
+      setup: filter=ansible_local
+
+# copy = copy files from local to remote
+# template = copy + parse the variable in the final file ----> valid for file contents only

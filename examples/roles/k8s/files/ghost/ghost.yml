@@ -1,0 +1,27 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ghost
+  labels:
+    app: ghost-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ghost-app
+  template:
+    metadata:
+      labels:
+        app: ghost-app
+    spec:
+      containers:
+      - name: ghost
+        image: ghost/ghost
+        envFrom:
+          - configMapRef:
+              name: ghost-configmap
+        ports:
+          - name: ghost-port
+            containerPort: 2368
+            protocol: TCP
